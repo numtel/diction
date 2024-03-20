@@ -71,6 +71,7 @@ const useSpeechBlobs = (volumeThreshold, silenceDuration, playing, onNewBlob) =>
             blob: audioBlob,
             transcriptionPromise: loadTranscription(audioBlob, APIKey),
             audio: new Audio(audioUrl),
+            url: audioUrl,
           };
           onNewBlob(blobProps);
           // Clear recorded chunks after blob is created

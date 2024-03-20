@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import toast from 'react-hot-toast';
 
 // TODO allow editing transcription
-// TODO play through multiple
 // TODO button to correct a transcription by reading a prompt from another audio blob
 const AudioBlobComponent = ({
   index,
@@ -10,7 +9,6 @@ const AudioBlobComponent = ({
   transcriptionPromise,
   audio,
   active,
-  moveItem,
   removeItem,
   setCursor,
   play,

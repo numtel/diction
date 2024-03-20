@@ -55,6 +55,9 @@ button {
 button.recording {
   background:#f00;
 }
+button.playing {
+  background: #0f0;
+}
 button svg.svg-inline--fa {
   display: block;
   height: 2rem;
@@ -108,18 +111,13 @@ button.end svg.svg-inline--fa {
   font-style:italic;
 }
 
-.blob:hover,
-.blob:active {
-  position:relative;
-}
 .blob .controls {
   display:none;
 }
-.blob:hover .controls,
-.blob:active .controls {
+.blob.active .controls {
   display:block;
-  position:absolute;
-  bottom: 100%;
+  position:fixed;
+  top: 0;
   left: 0;
   z-index: 1;
 }

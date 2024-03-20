@@ -21,6 +21,7 @@ function App() {
   const cursorRef = useRef();
   cursorRef.current = cursor;
   const [playing, setPlaying] = useState(false);
+  const [draggedItemId, setDraggedItemId] = useState(null);
   const [ APIKey, setAPIKey ] = useLocalStorage('OPENAI_API_KEY', '');
   const { array: items, insertItem, moveItem, removeItem } = useSortableArray();
   const {
@@ -48,8 +49,8 @@ function App() {
   );
 
   function play(index) {
-    if(index > items.length - 1) return;
     stop();
+    if(index > items.length - 1) return;
 
     setPlaying(true);
     const audio = items[index].audio;
@@ -74,6 +75,25 @@ function App() {
     }
   }
 
+  function onDragOver(id) {
+    // If the item is dragged over itself, ignore
+    if (draggedItemId === id) {
+      return;
+    }
+    const draggedItem = items.findIndex(item => item.url === draggedItemId);
+    const droppedOnItemIndex = items.findIndex(item => item.url === id);
+    moveItem(draggedItem, droppedOnItemIndex);
+  };
+
+  const onTouchMove = (e) => {
+    const touchLocation = e.targetTouches[0];
+    const targetElement = document.elementFromPoint(touchLocation.clientX, touchLocation.clientY);
+    if (targetElement && targetElement.closest('li').getAttribute("data-id")) {
+      const id = targetElement.closest('li').getAttribute("data-id");
+      onDragOver(id);
+    }
+  };
+
   return (
     <>
       <Toaster position="bottom-center" />
@@ -84,7 +104,7 @@ function App() {
               setPaused(!paused);
             }
           }}
-          className={status && !paused ? 'recording' : 'idle'}
+          className={`${playing ? 'playing' : ''} ${status && !paused ? 'recording' : 'idle'}`}
         >{!status ? (<>
           <FontAwesomeIcon icon={faMicrophone} />
           Start Recording
@@ -97,11 +117,21 @@ function App() {
           </>)}</button>
       </div>
       <ol className="document">
-        {items.map((blob, index) => (<li key={index}>
+        {items.map((blob, index) => (
+          <li
+            key={index}
+            data-id={blob.url}
+            draggable
+            onDragStart={() => setDraggedItemId(blob.url)}
+            onDragOver={() => onDragOver(blob.url)}
+            onTouchStart={() => setDraggedItemId(blob.url)}
+            onTouchMove={onTouchMove}
+            onTouchEnd={() => setDraggedItemId(null)}
+            >
           <AudioBlobComponent
             active={cursor===index}
             {...blob} 
-            {...{index, moveItem, removeItem, setCursor, play, stop}}
+            {...{index, removeItem, setCursor, play, stop}}
           />
         </li>))}
       </ol>
