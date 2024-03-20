@@ -1,13 +1,11 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import toast from 'react-hot-toast';
 
 // TODO allow editing transcription
 // TODO button to correct a transcription by reading a prompt from another audio blob
 const AudioBlobComponent = ({
   index,
-  blob,
   transcriptionPromise,
-  audio,
   active,
   removeItem,
   setCursor,
@@ -23,13 +21,14 @@ const AudioBlobComponent = ({
       setTranscription(result);
       setLoadingTranscription(false);
     }, error => {
+      console.error(error);
       toast.dismiss();
       toast.error('Transcription Error!');
     });
   }, [transcriptionPromise]);
 
   return (
-    <span className={`blob ${active ? 'active' :''}`} onClick={(event) => {
+    <span className={`blob ${active ? 'active' :''}`} onClick={() => {
       play(index);
       setCursor(index);
     }}>

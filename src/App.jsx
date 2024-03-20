@@ -4,7 +4,6 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   faMicrophone,
   faMicrophoneSlash,
-  faParagraph,
 } from '@fortawesome/free-solid-svg-icons';
 
 import './App.css'
@@ -83,16 +82,16 @@ function App() {
     const draggedItem = items.findIndex(item => item.url === draggedItemId);
     const droppedOnItemIndex = items.findIndex(item => item.url === id);
     moveItem(draggedItem, droppedOnItemIndex);
-  };
+  }
 
-  const onTouchMove = (e) => {
+  function onTouchMove(e) {
     const touchLocation = e.targetTouches[0];
     const targetElement = document.elementFromPoint(touchLocation.clientX, touchLocation.clientY);
     if (targetElement && targetElement.closest('li').getAttribute("data-id")) {
       const id = targetElement.closest('li').getAttribute("data-id");
       onDragOver(id);
     }
-  };
+  }
 
   return (
     <>

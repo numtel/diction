@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback, useRef } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import toast from 'react-hot-toast';
 
 import useLocalStorage from './useLocalStorage.jsx';
@@ -88,7 +88,7 @@ const useSpeechBlobs = (volumeThreshold, silenceDuration, playing, onNewBlob) =>
         toast.dismiss();
         toast.error('Microphone error!');
       });
-  }, [volumeThreshold, silenceDuration, APIKey]);
+  }, [volumeThreshold, silenceDuration, APIKey, onNewBlob]);
 
   // Cleanup function to stop recording and release resources when the component using this hook unmounts
   useEffect(() => {
@@ -129,4 +129,4 @@ async function loadTranscription(blob, APIKey) {
   );
   const parsed = await response.json();
   return parsed.text;
-};
+}
